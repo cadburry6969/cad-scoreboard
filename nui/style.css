@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+/* Main CSS */
+
+.playerlist {
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;  
+}
+
+.playerlist-toggle {
+  display: none;  
+  position: absolute; 
+  height: 85.75vh;
+  width: 40vh;
+  background-color: rgba(0, 0, 0, 0.548);
+  right: 6vh;
+  top: 8vh;
+  margin: 1vh;
+}
+
+.playerlist-header {
+  position: relative;
+  height: 5vh;
+  background: #0d0d0de2;
+}
+
+.playerlist-header > p {
+  text-align: center;
+  font-weight: bold;
+  color: #ededed;
+  padding: 1.3vh;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5vh;
+}
+
+.playerlist-info {
+  overflow-y: scroll;
+  height: 88%;
+}
+
+.playerlist-info::-webkit-scrollbar {
+  display: block;
+  background: transparent;  
+  width: 8px;
+}
+
+.playerlist-info::-webkit-scrollbar-thumb {
+  display: block;
+  background: #3a628d;    
+}
+
+.playerlist-info-count {  
+  position: relative;  
+  height: 4.25vh;
+  width: 100%;
+}
+
+.data-value-count {
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  right: 3vh;
+  float: left;
+  text-align: left;
+  line-height: 4.25vh;
+}
+
+.playerlist-data {
+  position: relative;  
+  height: 3.55vh;
+  width: 100%;
+}
+
+.data-title {
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3vh;
+  letter-spacing: 0.1vh;
+  left: 2.7vh;
+  line-height: 4vh;
+  font-weight: bold;
+  color: #ededed;  
+}
+
+.data-title:hover {
+  color: #3a628d;
+}
+
+.data-title-players {
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3vh;
+  letter-spacing: 0.1vh;
+  left: 2.4vh;
+  line-height: 4vh;
+  font-weight: bold;
+  color: #ededed;
+}
+
+.data-value {
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  right: 3vh;
+  float: left;
+  text-align: left;
+  line-height: 4.25vh;
+}
+
+
+
+
+
+
+
+
+
+
+/* Reset CSS */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+::-webkit-scrollbar {
+    display: none;
+}
