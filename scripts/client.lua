@@ -138,17 +138,19 @@ RegisterNUICallback('closelist', function(_, cb)
     cb('ok')
 end)
 
-CreateThread(function()        
-	while true do
-		Wait(1)
-		if NetworkIsSessionStarted() then
-            TriggerServerEvent("scoreboard:AddPlayer")            
-            InitializeList()
-            Debug("Single", "Loaded Playerlist Data")
-			return
-		end
-	end
-end)
+if Config.Debug then
+    CreateThread(function()        
+        while true do
+            Wait(1)
+            if NetworkIsSessionStarted() then
+                TriggerServerEvent("scoreboard:AddPlayer")            
+                InitializeList()
+                Debug("Single", "Loaded Playerlist Data")
+                return
+            end
+        end
+    end)
+end
 
 -- \ Command
 RegisterCommand('+scoreboard', function()
