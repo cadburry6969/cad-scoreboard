@@ -14,5 +14,11 @@ ui_page 'nui/index.html'
 shared_script 'scripts/config.lua'
 client_script 'scripts/client.lua'
 server_script 'scripts/server.lua'
+server_script 'version.lua'
 
 lua54 'yes'
+
+escrow_ignore {
+    'nui/*',
+    'scripts/*.lua',    
+}
