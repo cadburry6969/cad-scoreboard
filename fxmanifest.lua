@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Cadburry#7547'
 description 'Playerlist for QBCore FiveM'
-version '0.1'
+version '0.2'
 
 files {
     'nui/*'
