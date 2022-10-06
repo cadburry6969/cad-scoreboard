@@ -56,31 +56,35 @@ QBCore.Functions.CreateCallback('scoreboard:GetTotalPlayers', function(_, cb)
     cb(total)
 end)
 
-if Config.SteamCompulsory then    
-
-local function OnPlayerConnecting(name, setKickReason, deferrals)
-    local player = source
-    local steamIdentifier
-    local identifiers = GetPlayerIdentifiers(player)
-    deferrals.defer()
-    Wait(0)
-    deferrals.update(string.format("Validating Steam [%s]", name))
-    for _, v in pairs(identifiers) do
-        if string.find(v, "steam") then
-            steamIdentifier = v
-            break
+if Config.SteamCompulsory then
+    
+local function GetSteam(src)
+    for _, v in ipairs(GetPlayerIdentifiers(src)) do
+        if string.find(v, 'steam') then
+            return v
         end
     end
+    return nil
+end
+
+local function onPlayerConnecting(name, _, deferrals)
+    local src = source
+    deferrals.defer()
+    -- Mandatory wait
     Wait(0)
-    if not steamIdentifier then
-        Debug("Single", "Player ["..GetPlayerName(source).."] "..steamIdentifier.." could not connect as steam identifier was not found")
+    deferrals.update(string.format("Validating Steam [%s]", name))
+    local steam = GetSteam(src)
+    -- Mandatory wait
+    Wait(2500)
+    if not steam then
+        Debug("Single", "Player ["..name.."] could not connect as steam identifier was not found")
         deferrals.done("You are not connected to Steam.")
     else
-        Debug("Single", "Player ["..GetPlayerName(source).."] "..steamIdentifier.." connected")
+        Debug("Single", "Player ["..name.."] connected")
         deferrals.done()
     end
 end
 
-AddEventHandler("playerConnecting", OnPlayerConnecting)
+AddEventHandler("playerConnecting", onPlayerConnecting)
 
 end
