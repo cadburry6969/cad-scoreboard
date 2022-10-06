@@ -26,8 +26,10 @@ const Close = () => {
 
 const Setup = (data) => {
   let playerlistHtml = "";
-  $.each(data.items, (index, value) => {        
-    index += 1; // As js takes first index as 0 we add 1 to every index
+  $.each(data.items, (index, value) => {
+    if (index == 0) {
+      index = 1;
+    }    
     if (value != null) {
       playerlistHtml += `
         <div class="playerlist-data" data-type=${index}>
