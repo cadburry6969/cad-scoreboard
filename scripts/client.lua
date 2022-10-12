@@ -3,12 +3,6 @@ local IsPlayerListOpen = false
 local PlayerList = {}
 
 -- \ Debug
-if Config.Debug then
-    for i=1 , 25, 1 do
-        PlayerList[i] = {src = i, identifier = tostring(QBCore.Shared.RandomStr(3)..QBCore.Shared.RandomInt(5)):upper()}
-    end
-end
-
 local function Debug(a, b)
     if Config.Debug then
         print("["..a.."] "..b)
@@ -94,7 +88,7 @@ local function InitializeList()
     Wait(1000)
     local list = {}
     for k, v in pairs(PlayerList) do
-        list[k] = v.identifier
+        list[k] = {iden = v.identifier, src = v.src}
     end    
     Debug("Single", json.encode(list))
     SendNUIMessage({
@@ -155,13 +149,14 @@ end
 -- \ Command
 RegisterCommand('+scoreboard', function()
     if IsPlayerListOpen then return end
-    QBCore.Functions.TriggerCallback('scoreboard:GetTotalPlayers', function(players, playerList)
+    QBCore.Functions.TriggerCallback('scoreboard:GetTotalPlayers', function(players)
         SetNuiFocus(true, true)
         SetNuiFocusKeepInput(true)
         SendNUIMessage({
             action = "open",
             players = players,
             maxPlayers = Config.MaxPlayers,
+            closeInstantly = Config.CloseInstantly,
         })
 
         IsPlayerListOpen = true

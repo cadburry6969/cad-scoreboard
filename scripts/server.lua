@@ -8,13 +8,13 @@ end
 
 function AddAllPlayers(self)
     local xPlayers = QBCore.Functions.GetPlayers()
-    for i=1, #xPlayers, 1 do       
+    for i=1, #xPlayers, 1 do
         if xPlayers[i] then
-            local pidentifier = QBCore.Functions.GetIdentifier(xPlayers[i], "steam")     
+            local pidentifier = QBCore.Functions.GetIdentifier(xPlayers[i], "steam")
             local Player = QBCore.Functions.GetPlayer(xPlayers[i])
-            local pCid = Player.PlayerData.citizenid                      
+            local pCid = Player.PlayerData.citizenid
             if pidentifier == nil then pidentifier = pCid end
-            local data = { src = xPlayers[i], identifier = pidentifier}            
+            local data = { src = xPlayers[i], identifier = pidentifier}
             TriggerClientEvent("scoreboard:AddAllPlayers", source, data, recentData)
             Debug("Multiple", "Player ["..GetPlayerName(xPlayers[i]).."] "..pidentifier.." added to playerlist")
         end
@@ -22,12 +22,12 @@ function AddAllPlayers(self)
 end
 
 RegisterNetEvent('scoreboard:AddPlayer', function()
-    local pidentifier = QBCore.Functions.GetIdentifier(source, "steam")     
+    local pidentifier = QBCore.Functions.GetIdentifier(source, "steam")
     local Player = QBCore.Functions.GetPlayer(source)
     if Player then
-        local pCid = Player.PlayerData.citizenid        
-        if pidentifier == nil then pidentifier = pCid end            
-        local data = { src = source, identifier = pidentifier}        
+        local pCid = Player.PlayerData.citizenid
+        if pidentifier == nil then pidentifier = pCid end
+        local data = { src = source, identifier = pidentifier}
         TriggerClientEvent("scoreboard:AddPlayer", -1, data)
         Debug("Single", "Player ["..GetPlayerName(source).."] "..pidentifier.." added to playerlist")
         AddAllPlayers()
@@ -35,12 +35,12 @@ RegisterNetEvent('scoreboard:AddPlayer', function()
 end)
 
 AddEventHandler("playerDropped", function()
-    local pidentifier = QBCore.Functions.GetIdentifier(source, "steam")       
+    local pidentifier = QBCore.Functions.GetIdentifier(source, "steam")
     local Player = QBCore.Functions.GetPlayer(source)
     if Player then
-        local pCid = Player.PlayerData.citizenid                      
+        local pCid = Player.PlayerData.citizenid
         if pidentifier == nil then pidentifier = pCid end
-        local data = { src = source, identifier = pidentifier}        
+        local data = { src = source, identifier = pidentifier}
         TriggerClientEvent("scoreboard:RemovePlayer", -1, data)
         Debug("Single", "Player ["..GetPlayerName(source).."] "..pidentifier.." disconnected")
     end
