@@ -10,6 +10,21 @@ local function Debug(a, b)
 end
 
 -- \ Functions
+local function PlayAnimation(isPlay, animDict, animName, duration)
+    if Config.PlayEmote then
+        if isPlay then
+            RequestAnimDict(animDict)
+            while not HasAnimDictLoaded(animDict) do
+                Wait(0)
+            end
+            TaskPlayAnim(PlayerPedId(), animDict, animName, 1.0, -1.0, duration, 49, 1, false, false, false)
+            RemoveAnimDict(animDict)
+        else
+            StopAnimTask(PlayerPedId(), animDict, animName, 1.0)
+        end
+    end
+end
+
 local function TextDraw(data)
     local onScreen, screenX, screenY = World3dToScreen2d(data.coords.x, data.coords.y, data.coords.z)
     if onScreen then
@@ -66,21 +81,28 @@ end
 local function ShowID()
     if Config.EnableIDAboveHead then
         local show = true
-        while show do
-            local sleep = 100
-            if IsPlayerListOpen then
-                for _, player in pairs(GetPlayersFromCoords(GetEntityCoords(PlayerPedId()), 10.0)) do
-                    sleep = 0
-                    local playerId = GetPlayerServerId(player)
-                    local playerPed = GetPlayerPed(player)
-                    local playerCoords = GetEntityCoords(playerPed)                
-                    TextDraw({coords = vector3(playerCoords.x, playerCoords.y, playerCoords.z+1.0), fontsize = 0.5, fontstyle = 2, r = 255, g = 255, b = 255, text = playerId})
+        CreateThread(function()
+            while show do
+                local sleep = 100
+                if IsPlayerListOpen then
+                    for _, player in pairs(GetPlayersFromCoords(GetEntityCoords(PlayerPedId()), 10.0)) do
+                        sleep = 0
+                        local playerId = GetPlayerServerId(player)
+                        local playerPed = GetPlayerPed(player)
+                        local playerCoords = GetEntityCoords(playerPed)                
+                        TextDraw({coords = vector3(playerCoords.x, playerCoords.y, playerCoords.z+1.0), fontsize = 0.5, fontstyle = 2, r = 255, g = 255, b = 255, text = playerId})
+                    end
+                    if Config.PlayEmote then
+                        if not IsEntityPlayingAnim(PlayerPedId(), Config.AnimDict, Config.AnimEmote, 3) then
+                            PlayAnimation(true, Config.AnimDict, Config.AnimEmote, -1)
+                        end
+                    end
+                else
+                    show = false
                 end
-            else
-                show = false
+                Wait(sleep)
             end
-            Wait(sleep)
-        end
+        end)
     end
 end
 
@@ -95,6 +117,33 @@ local function InitializeList()
         action = "setup",
         items = list
     })
+end
+
+local function DisableControls()
+    if Config.DisableControls then
+        local isdisabled = true
+        CreateThread(function()
+            while isdisabled do
+                if IsPlayerListOpen then
+                    DisableAllControlActions(0)
+                    EnableControlAction(0, 1, true)
+                    EnableControlAction(0, 2, true)
+                    EnableControlAction(0, 245, true)
+                    EnableControlAction(0, 38, true)
+                    EnableControlAction(0, 322, true)
+                    EnableControlAction(0, 249, true)
+                    EnableControlAction(0, 46, true)
+                    EnableControlAction(0, 32, true)
+                    EnableControlAction(0, 33, true)
+                    EnableControlAction(0, 34, true)
+                    EnableControlAction(0, 35, true)
+                else
+                    isdisabled = false
+                end
+                Wait(4)
+            end
+        end)
+    end
 end
 
 -- \ Events
@@ -122,11 +171,9 @@ end)
 -- \ Nui callbacks
 RegisterNUICallback('closelist', function(_, cb)
     if not IsPlayerListOpen then return end
+    PlayAnimation(false, Config.AnimDict, Config.AnimEmote, -1)
     SetNuiFocus(false, false)
     SetNuiFocusKeepInput(false)
-    SendNUIMessage({
-        action = "close",
-    })    
     IsPlayerListOpen = false
     Debug("Single", "Closed Playerlist")
     cb('ok')
@@ -148,32 +195,30 @@ end
 
 -- \ Command
 RegisterCommand('+scoreboard', function()
-    if IsPlayerListOpen then return end
-    QBCore.Functions.TriggerCallback('scoreboard:GetTotalPlayers', function(players)
-        SetNuiFocus(true, true)
-        SetNuiFocusKeepInput(true)
-        SendNUIMessage({
-            action = "open",
-            players = players,
-            maxPlayers = Config.MaxPlayers,
-            closeInstantly = Config.CloseInstantly,
-        })
-
-        IsPlayerListOpen = true
-        ShowID()
-        Debug("Single", "Opened Playerlist")
-    end)
+    if IsPlayerListOpen and not Config.CloseInstantly then
+        SendNUIMessage({action = "close"})
+    else
+        PlayAnimation(true, Config.AnimDict, Config.AnimEmote, -1)
+        QBCore.Functions.TriggerCallback('scoreboard:GetTotalPlayers', function(players)
+            SetNuiFocus(true, true)
+            SetNuiFocusKeepInput(true)
+            SendNUIMessage({
+                action = "open",
+                players = players,
+                maxPlayers = Config.MaxPlayers,
+            })
+            IsPlayerListOpen = true
+            DisableControls()
+            ShowID()
+            Debug("Single", "Opened Playerlist")
+        end)
+        return 
+    end
 end, false)
 
 if Config.CloseInstantly then
     RegisterCommand('-scoreboard', function()
-        if not IsPlayerListOpen then return end
-        SetNuiFocus(false, false)
-        SetNuiFocusKeepInput(false)
-        SendNUIMessage({
-            action = "close",
-        })    
-        IsPlayerListOpen = false
+        SendNUIMessage({action = "close"})
         Debug("Single", "Closed Playerlist")
     end, false)
 end

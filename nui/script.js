@@ -1,4 +1,3 @@
-var closeInstantly = false;
 // events
 window.addEventListener("message", (event) => {
   switch (event.data.action) {
@@ -16,7 +15,6 @@ window.addEventListener("message", (event) => {
 
 // functions
 const Open = (data) => {
-  closeInstantly = data.closeInstantly;
   $(".playerlist-toggle").fadeIn(0);
   $("#total-players").html("<p>" + data.players + " / " + data.maxPlayers + "</p>");
 };
@@ -31,7 +29,7 @@ const Setup = (data) => {
   $.each(data.items, (index, value) => {
     if (value != null) {
       playerlistHtml += `
-        <div class="playerlist-data" data-type=${value.iden}>
+        <div class="playerlist-data">
           <div class="data-title">
               <p>[${value.src}] ${value.iden}</p>
           </div>
@@ -46,12 +44,9 @@ const Setup = (data) => {
 // keypress (onkeydown)
 document.onkeydown = function (event) {
   const charCode = event.key;
-  console.log(closeInstantly);
   if (charCode == "Escape") {
     Close();
   } else if (charCode == "Backspace") {
     Close();
-  } else if (charCode == "u" && (closeInstantly == false)) {    
-    Close();
-  }   
+  } 
 };
