@@ -20,5 +20,5 @@ lua54 'yes'
 
 escrow_ignore {
     'nui/*',
-    'scripts/*.lua',    
+    'scripts/config.lua',    
 }
