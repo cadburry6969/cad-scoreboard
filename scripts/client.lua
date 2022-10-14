@@ -107,7 +107,6 @@ local function ShowID()
 end
 
 local function InitializeList()
-    Wait(1000)
     local list = {}
     for k, v in pairs(PlayerList) do
         list[k] = {iden = v.identifier, src = v.src}
@@ -125,18 +124,24 @@ local function DisableControls()
         CreateThread(function()
             while isdisabled do
                 if IsPlayerListOpen then
-                    DisableAllControlActions(0)
-                    EnableControlAction(0, 1, true)
-                    EnableControlAction(0, 2, true)
-                    EnableControlAction(0, 245, true)
-                    EnableControlAction(0, 38, true)
-                    EnableControlAction(0, 322, true)
-                    EnableControlAction(0, 249, true)
-                    EnableControlAction(0, 46, true)
-                    EnableControlAction(0, 32, true)
-                    EnableControlAction(0, 33, true)
-                    EnableControlAction(0, 34, true)
-                    EnableControlAction(0, 35, true)
+                    DisablePlayerFiring(PlayerPedId(), true)
+                    DisableControlAction(0, 1, true)
+                    DisableControlAction(0, 2, true)
+                    DisableControlAction(0, 24, true)
+                    DisableControlAction(0, 25, true)
+                    DisableControlAction(0, 38, true)
+                    DisableControlAction(0, 45, true)
+                    DisableControlAction(0, 46, true)
+                    DisableControlAction(0, 245, true)
+                    DisableControlAction(0, 249, true)
+                    DisableControlAction(0, 263, true)
+                    DisableControlAction(0, 264, true)
+                    DisableControlAction(0, 257, true)
+                    DisableControlAction(0, 140, true)
+                    DisableControlAction(0, 141, true)
+                    DisableControlAction(0, 142, true)
+                    DisableControlAction(0, 143, true)
+                    DisableControlAction(0, 322, true)
                 else
                     isdisabled = false
                 end
@@ -149,7 +154,8 @@ end
 -- \ Events
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()        
     TriggerServerEvent("scoreboard:AddPlayer")
-    InitializeList()    
+    Wait(1000)
+    InitializeList()
     Debug("Single", "Loaded Playerlist Data")
 end)
 
@@ -184,7 +190,8 @@ if Config.Debug then
         while true do
             Wait(1)
             if NetworkIsSessionStarted() then
-                TriggerServerEvent("scoreboard:AddPlayer")            
+                TriggerServerEvent("scoreboard:AddPlayer")
+                Wait(1000)
                 InitializeList()
                 Debug("Single", "Loaded Playerlist Data")
                 return
@@ -198,6 +205,7 @@ RegisterCommand('+scoreboard', function()
     if IsPlayerListOpen and not Config.CloseInstantly then
         SendNUIMessage({action = "close"})
     else
+        InitializeList()
         PlayAnimation(true, Config.AnimDict, Config.AnimEmote, -1)
         QBCore.Functions.TriggerCallback('scoreboard:GetTotalPlayers', function(players)
             SetNuiFocus(true, true)

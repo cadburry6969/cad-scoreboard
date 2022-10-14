@@ -20,8 +20,8 @@ const Open = (data) => {
 };
 
 const Close = () => {
+  $(".playerlist-toggle").fadeOut(0);
   $.post(`https://${GetParentResourceName()}/closelist`);
-  $(".playerlist-toggle").fadeOut(0);      
 };
 
 const Setup = (data) => {
